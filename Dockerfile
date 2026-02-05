@@ -18,6 +18,6 @@ WORKDIR /app
 # Install Pyppeteer
 RUN pip install --no-cache-dir pyppeteer
 
-COPY hok_scraper.py .
+COPY src/hok_scraper.py .
 
 ENTRYPOINT ["python", "hok_scraper.py"]
