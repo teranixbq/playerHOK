@@ -40,10 +40,27 @@ curl -X POST http://localhost:8000/players \
 
 ## Docker
 
+### Pull from DockerHub
+
 ```bash
-docker build -t hok-api .
-docker run -p 8000:8000 hok-api
+docker pull YOUR_USERNAME/playerhok:latest
+docker run -p 8000:8000 YOUR_USERNAME/playerhok:latest
 ```
+
+### Build locally
+
+```bash
+docker build -t playerhok .
+docker run -p 8000:8000 playerhok
+```
+
+## Setup GitHub Actions (Auto-build to DockerHub)
+
+1. Buat secrets di GitHub repository:
+   - `DOCKERHUB_USERNAME` - Username DockerHub Anda
+   - `DOCKERHUB_TOKEN` - Access token dari DockerHub
+
+2. Setiap push ke branch `main` akan otomatis build & push ke DockerHub
 
 ## Docs
 
