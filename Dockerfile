@@ -15,9 +15,13 @@ ENV PYPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 WORKDIR /app
 
-# Install Pyppeteer
-RUN pip install --no-cache-dir pyppeteer
+# Install Pyppeteer and API dependencies
+RUN pip install --no-cache-dir pyppeteer fastapi uvicorn pydantic requests
 
-COPY src/hok_scraper.py .
+COPY src/ src/
 
-ENTRYPOINT ["python", "hok_scraper.py"]
+# Expose API port
+EXPOSE 8000
+
+# Run API server by default
+CMD ["uvicorn", "src.api:app", "--host", "0.0.0.0", "--port", "8000"]
