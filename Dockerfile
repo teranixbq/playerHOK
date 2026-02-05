@@ -1,22 +1,23 @@
-FROM python:3.11-slim
+FROM python:3.9-alpine
+
+# Install Chromium and dependencies
+RUN apk add --no-cache \
+    chromium \
+    nss \
+    freetype \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont
+
+# Tell Pyppeteer to use system Chromium
+# On Alpine, the binary is usually at /usr/bin/chromium-browser
+ENV PYPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 WORKDIR /app
 
-ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+# Install Pyppeteer
+RUN pip install --no-cache-dir pyppeteer
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    wget \
-    && rm -rf /var/lib/apt/lists/*
+COPY hok_scraper.py .
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-RUN playwright install --with-deps chromium && \
-    rm -rf /var/lib/apt/lists/* && \
-    apt-get clean
-
-COPY src/ ./src/
-
-EXPOSE 8000
-
-CMD ["python", "src/api.py"]
+ENTRYPOINT ["python", "hok_scraper.py"]
